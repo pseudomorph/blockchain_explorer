@@ -1,0 +1,11 @@
+#!/bin/bash
+
+#python3 -m venv venv
+
+cd src/blockchain_explorer
+pwd
+ls
+set -a
+source ../../venv/bin/activate
+set +a
+pip3 install -r requirements.txt
