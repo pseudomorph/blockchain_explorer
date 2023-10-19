@@ -117,6 +117,21 @@ resource "aws_codebuild_project" "blockchain_explorer" {
       name  = "REPOSITORY_URI"
       value = aws_ecr_repository.poc.repository_url
     }
+
+    environment_variable {
+      name = "EKS_CLUSTER_NAME"
+      value = module.eks.cluster_name
+    }
+    
+    environment_variable {
+      name = "EKS_DEPLOYMENT_NAME"
+      value = "deployment-bce"
+    }
+
+    environment_variable {
+      name = "EKS_DEPLOYMENT_NAMESPACE"
+      value = "bce"
+    }
   }
 
   source {
