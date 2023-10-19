@@ -76,6 +76,12 @@ data "aws_iam_policy_document" "example" {
     actions   = ["ecr:*"]
     resources = [aws_ecr_repository.poc.arn]
   }
+  # Allow access to EKS
+  statement {
+    effect = "Allow"
+    actions = ["eks:UpdateClusterConfig"]
+    resources = [module.eks.cluster_arn]
+  }
 }
 
 resource "aws_iam_role_policy" "example" {

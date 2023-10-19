@@ -24,3 +24,7 @@ phases:
       - echo Pushing the Docker images...
       - docker push "${REPOSITORY_URI}:latest"
       - docker push "${REPOSITORY_URI}:${IMAGE_TAG}"
+      - echo Setup kubectl with cluster
+      - aws eks update-kubeconfig --name poc-eks --region us-east-2
+      - echo Update image tag on deployment/deployment-bce
+      - kubectl -n bce set image deployment/deployment-bce app-bce=874046767325.dkr.ecr.us-east-2.amazonaws.com/blockchain_explorer:${IMAGE_TAG}
