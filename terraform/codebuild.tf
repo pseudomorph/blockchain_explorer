@@ -78,8 +78,8 @@ data "aws_iam_policy_document" "example" {
   }
   # Allow access to EKS
   statement {
-    effect = "Allow"
-    actions = ["eks:UpdateClusterConfig"]
+    effect    = "Allow"
+    actions   = ["eks:DescribeCluster"]
     resources = [module.eks.cluster_arn]
   }
 }

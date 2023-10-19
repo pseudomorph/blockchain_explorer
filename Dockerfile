@@ -1,4 +1,4 @@
-FROM alpine
+FROM public.ecr.aws/docker/library/alpine
 
 RUN apk update
 RUN apk add python3 py3-pip
