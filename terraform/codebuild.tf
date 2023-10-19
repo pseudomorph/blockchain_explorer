@@ -63,6 +63,19 @@ data "aws_iam_policy_document" "example" {
       values   = ["codebuild.amazonaws.com"]
     }
   }
+
+  # Allow access to target ECR repo.
+  # TODO: hone perms in.
+  statement {
+    effect    = "Allow"
+    actions   = ["ecr:GetAuthorizationToken"]
+    resources = ["*"]
+  }
+  statement {
+    effect    = "Allow"
+    actions   = ["ecr:*"]
+    resources = [aws_ecr_repository.poc.arn]
+  }
 }
 
 resource "aws_iam_role_policy" "example" {
@@ -92,6 +105,7 @@ resource "aws_codebuild_project" "blockchain_explorer" {
     image                       = "aws/codebuild/amazonlinux2-x86_64-standard:4.0"
     type                        = "LINUX_CONTAINER"
     image_pull_credentials_type = "CODEBUILD"
+    privileged_mode             = true
 
     environment_variable {
       name  = "REPOSITORY_URI"
