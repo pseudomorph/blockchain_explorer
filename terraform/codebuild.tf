@@ -127,7 +127,7 @@ resource "aws_codebuild_webhook" "example" {
 
     filter {
       type    = "HEAD_REF"
-      pattern = "master"
+      pattern = "main"
     }
   }
 }
