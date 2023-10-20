@@ -119,18 +119,23 @@ resource "aws_codebuild_project" "blockchain_explorer" {
     }
 
     environment_variable {
-      name = "EKS_CLUSTER_NAME"
+      name  = "EKS_CLUSTER_NAME"
       value = module.eks.cluster_name
     }
-    
+
     environment_variable {
-      name = "EKS_DEPLOYMENT_NAME"
+      name  = "EKS_DEPLOYMENT_NAME"
       value = "deployment-bce"
     }
 
     environment_variable {
-      name = "EKS_DEPLOYMENT_NAMESPACE"
+      name  = "EKS_DEPLOYMENT_NAMESPACE"
       value = "bce"
+    }
+
+    environment_variable {
+      name  = "EKS_APP_NAME"
+      value = "app-bce"
     }
   }
 
