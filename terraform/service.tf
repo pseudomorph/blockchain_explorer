@@ -32,6 +32,16 @@ resource "kubernetes_deployment" "deployment-bce" {
           port {
             container_port = 8000
           }
+          resources {
+            limits = {
+              cpu    = "0.5"
+              memory = "512Mi"
+            }
+            requests = {
+              cpu    = "250m"
+              memory = "50Mi"
+            }
+          }
         }
       }
     }
@@ -65,11 +75,11 @@ resource "kubernetes_ingress_v1" "example_ingress" {
     namespace = "bce"
     name      = "ingress-bce"
     annotations = {
-      "alb.ingress.kubernetes.io/scheme"               = "internet-facing"
-      "alb.ingress.kubernetes.io/target-type"          = "ip"
-      "alb.ingress.kubernetes.io/certificate-arn"      = aws_acm_certificate.example.arn
-      "alb.ingress.kubernetes.io/listen-ports"         = "[{\"HTTP\": 80}, {\"HTTPS\":443}]"
-      "alb.ingress.kubernetes.io/ssl-redirect" = "443"
+      "alb.ingress.kubernetes.io/scheme"          = "internet-facing"
+      "alb.ingress.kubernetes.io/target-type"     = "ip"
+      "alb.ingress.kubernetes.io/certificate-arn" = aws_acm_certificate.example.arn
+      "alb.ingress.kubernetes.io/listen-ports"    = "[{\"HTTP\": 80}, {\"HTTPS\":443}]"
+      "alb.ingress.kubernetes.io/ssl-redirect"    = "443"
     }
   }
   spec {
@@ -93,8 +103,28 @@ resource "kubernetes_ingress_v1" "example_ingress" {
   }
 }
 
+resource "kubernetes_horizontal_pod_autoscaler" "my_hpa" {
+  metadata {
+    name      = "bce-hpa"
+    namespace = "bce"
+  }
 
-# TODO: Parameterise inputs and leverage external-dns and cert-manager addons
+  spec {
+    max_replicas = 10
+    min_replicas = 3
+
+    target_cpu_utilization_percentage = 80
+
+    scale_target_ref {
+      kind        = "Deployment"
+      name        = "deployment-bce"
+      api_version = "apps/v1"
+    }
+  }
+}
+
+
+# TODO: Parameterise inputs and leverage external-dns and cert-manager
 resource "aws_acm_certificate" "example" {
   domain_name       = "bce.trou7.com"
   validation_method = "DNS"

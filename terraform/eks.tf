@@ -32,10 +32,9 @@ module "eks" {
       name = "node-group-2"
 
       instance_types = ["t3.small"]
-
-      min_size     = 1
-      max_size     = 2
-      desired_size = 1
+      min_size       = 1
+      max_size       = 2
+      desired_size   = 1
     }
   }
 
@@ -145,4 +144,21 @@ resource "helm_release" "ingress" {
     name  = "serviceAccount.name"
     value = "aws-load-balancer-controller"
   }
+}
+
+
+resource "helm_release" "metrics_server" {
+  name       = "metrics-server"
+  repository = "https://kubernetes-sigs.github.io/metrics-server/"
+  chart      = "metrics-server"
+  namespace  = "kube-system"
+
+  #  # Recent updates to the Metrics Server do not work with self-signed certificates by default.
+  #  # Since Docker For Desktop uses such certificates, you’ll need to allow insecure TLS
+  #  set {
+  #    name  = "args"
+  #    value = "{--kubelet-insecure-tls=true}"
+  #  }
+
+  wait = true
 }
