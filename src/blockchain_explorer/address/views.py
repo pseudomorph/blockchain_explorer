@@ -31,4 +31,15 @@ def balance(request, address):
         return Response({"error": "web3 backend unavailable"}, status=500)
     # get_balance method returns in wei, we need to convert to ether.
     ether_balance = w3.from_wei(wei_balance, "ether")
-    return Response({"balance": ether_balance}, status=200)
+    return Response({"balance!": ether_balance}, status=200)
+
+
+# @api_view(("GET",))
+# @renderer_classes((JSONRenderer,))
+# def transaction(request, hash):
+#    try:
+#        transaction = w3.eth.get_transaction(hash)
+#        print(dict(transaction))
+#    except exceptions.TransactionNotFound as e:
+#        return Response({"error": str(e)}, status=400)
+#    return Response({"result": transaction}, status=200)
