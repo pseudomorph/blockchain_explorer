@@ -31,4 +31,4 @@ def balance(request, address):
         return Response({"error": "web3 backend unavailable"}, status=500)
     # get_balance method returns in wei, we need to convert to ether.
     ether_balance = w3.from_wei(wei_balance, "ether")
-    return Response({"balance": ether_balance}, status=200)
+    return Response({"balances": ether_balance}, status=200)
